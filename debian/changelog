@@ -1,3 +1,17 @@
+micro-httpd (20140814-2.1) unstable; urgency=medium
+
+  * Non-Maintainer Upload.
+  * Fixed "cannot configure the root directory if started by systemd
+    instead of inetd" by adding a NEWS item (Closes: #983232).
+  * Fixed "systemd install dependency fails if binding to IP other than
+    0.0.0.0" by adding FreeBind=true to the socket unit (Closes: #991324).
+    Thanks to Ansgar Burchardt for the solution.
+  * Fixed "micro-httpd@.service:6: Special user nobody configured, this is
+    not safe!" by using the canonical www-data user (Closes: #991884).
+  * Ran 'quilt refresh' which defuzzed 30_makefile-strip-fix.dpatch
+
+ -- Martin-Éric Racine <martin-eric.racine@iki.fi>  Thu, 14 Oct 2021 16:02:47 +0300
+
 micro-httpd (20140814-2) unstable; urgency=medium
 
   [ Debian Janitor ]

@@ -10,10 +10,10 @@ Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
  Makefile |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 090cadc..2faa776 100644
---- a/Makefile
-+++ b/Makefile
+Index: micro-httpd-20140814/Makefile
+===================================================================
+--- micro-httpd-20140814.orig/Makefile
++++ micro-httpd-20140814/Makefile
 @@ -3,7 +3,7 @@ MANDIR =	/usr/local/man/man8
  CC =		cc
  CFLAGS =	-O -ansi -pedantic -U__STRICT_ANSI__ -Wall -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
@@ -23,6 +23,3 @@ index 090cadc..2faa776 100644
  
  all:		micro_httpd
  
--- 
-1.6.5
-

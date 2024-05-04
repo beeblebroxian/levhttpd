@@ -1,3 +1,24 @@
+micro-httpd (20140814-2.1) unstable; urgency=medium
+
+  On hosts booting with systemd, the daemon is configured via systemd units.
+
+  1) To change the document root, type the following line in a command shell:
+
+       sudo systemctl edit micro-httpd@.service
+
+     Then change the second part of ExecStart to a different path.
+
+  2) To change IP address or port, type the following line in a command shell:
+
+       sudo systemctl edit micro-httpd.socket
+  
+     Then change ListenStream to a different IP address and port combination.
+
+  On hosts booting with the traditional BSD init, the daemon in configured via
+  the /etc/inetd.conf (document root) and /etc/services (port) text files.
+
+ -- Martin-Éric Racine <martin-eric.racine@iki.fi>  Thu, 14 Oct 2021 16:53:42 +0300
+
 micro-httpd (20051212-5) unstable; urgency=low
 
   The binary name has changed from micro_httpd to the micro-httpd.

@@ -244,6 +244,8 @@ get_mime_type( char* name )
 	return "audio/wav";
     if ( strcmp( dot, ".avi" ) == 0 )
 	return "video/x-msvideo";
+    if ( strcmp( dot, ".swf" ) == 0 )
+	return "application/x-shockwave-flash";
     if ( strcmp( dot, ".mov" ) == 0 || strcmp( dot, ".qt" ) == 0 )
 	return "video/quicktime";
     if ( strcmp( dot, ".mpeg" ) == 0 || strcmp( dot, ".mpe" ) == 0 )
