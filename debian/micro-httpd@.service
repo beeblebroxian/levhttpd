@@ -7,3 +7,4 @@ User=www-data
 Group=www-data
 ExecStart=-/usr/sbin/micro-httpd /var/www/html
 StandardInput=socket
+StandardError=journal

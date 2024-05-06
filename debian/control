@@ -2,7 +2,7 @@ Source: micro-httpd
 Section: httpd
 Priority: optional
 Maintainer: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Build-Depends: debhelper-compat (= 12)
+Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Vcs-Browser: https://github.com/sudipm-mukherjee/micro-httpd.git
@@ -11,7 +11,7 @@ Homepage: https://www.acme.com/software/micro_httpd
 
 Package: micro-httpd
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, openbsd-inetd | inet-superserver | micro-inetd | netcat-traditional | systemd-sysv
+Depends: update-inetd | inet-superserver | openbsd-inetd | inetutils-inetd | rlinetd | xinetd, ${misc:Depends}, ${shlibs:Depends}
 Suggests: micro-proxy
 Provides: httpd
 Description: really small HTTP server
