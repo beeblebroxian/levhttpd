@@ -1,3 +1,18 @@
+micro-httpd (20140814-3) unstable; urgency=medium
+
+  [ Martin-Éric Racine ]
+  * Bump debhelper-compat to 13.
+  * Fix Lintian override syntax.
+  * Fix "Lintian: W: missing Depends on update-inetd" (Closes: #997691).
+  * Fix "sends invalid HTTP when listing unreadable dirs" (Closes: #1027978).
+    Implemented the first alternative proposed in the bug report i.e.
+    redirect standard error to systemd journal.
+
+  [ Sudip Mukherjee ]
+  * Update Standards-Version to 4.6.2
+
+ -- Sudip Mukherjee <sudipm.mukherjee@gmail.com>  Mon, 06 May 2024 13:16:18 +0100
+
 micro-httpd (20140814-2.1) unstable; urgency=medium
 
   * Non-Maintainer Upload.
