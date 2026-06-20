@@ -61,6 +61,7 @@ static void serve_file(
         name
     );
 
+    printf("OPEN: %s\n", path);
 
     f = open(path, O_RDONLY);
 
