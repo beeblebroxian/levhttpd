@@ -1,4 +1,3 @@
-```makefile
 CC ?= gcc
 CFLAGS ?= -O2 -Wall -Wextra
 
@@ -16,8 +15,4 @@ strip: $(TARGET)
 clean:
 	rm -f $(TARGET)
 
-install:
-	install -m 755 $(TARGET) /usr/local/bin/$(TARGET)
-
-.PHONY: all strip clean install
-```
+.PHONY: all strip clean
