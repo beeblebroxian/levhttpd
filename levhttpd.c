@@ -26,12 +26,7 @@ static void send_error(int c, int code, const char *msg)
 }
 
 
-static void serve_file(
-    int c,
-    const char *root,
-    char *name,
-    char *request
-)
+static void send_file(int c, const char *root, char *name, char *request)
 {
     char path[2048];
     char buf[BUF];
@@ -44,6 +39,7 @@ static void serve_file(
 
     int f;
     ssize_t n;
+    int head = 0;
 
 
     if (strstr(name, ".."))
@@ -53,15 +49,12 @@ static void serve_file(
     }
 
 
-    snprintf(
-        path,
-        sizeof(path),
-        "%s/%s",
-        root,
-        name
-    );
+    if (strncmp(request, "HEAD ", 5) == 0)
+        head = 1;
 
-    printf("OPEN: %s\n", path);
+
+    snprintf(path, sizeof(path), "%s/%s", root, name);
+
 
     f = open(path, O_RDONLY);
 
@@ -84,54 +77,43 @@ static void serve_file(
     end = total - 1;
 
 
-    /*
-       Range: bytes=start-
-    */
     char *r = strstr(request, "Range:");
 
-    if (r)
+    if (r && sscanf(r, "Range: bytes=%lld-", &start) == 1
+          && start < total)
     {
-        if (sscanf(
-                r,
-                "Range: bytes=%lld-",
-                &start
-            ) == 1)
-        {
-            if (start >= total)
-                start = 0;
+        lseek(f, start, SEEK_SET);
 
-
-            lseek(
-                f,
-                start,
-                SEEK_SET
-            );
-
-
-            dprintf(c,
-                "HTTP/1.1 206 Partial Content\r\n"
-                "Content-Length: %lld\r\n"
-                "Content-Range: bytes %lld-%lld/%lld\r\n"
-                "Accept-Ranges: bytes\r\n"
-                "Connection: close\r\n"
-                "\r\n",
-                end - start + 1,
-                start,
-                end,
-                total
-            );
-        }
+        dprintf(c,
+            "HTTP/1.1 206 Partial Content\r\n"
+            "Content-Length: %lld\r\n"
+            "Content-Range: bytes %lld-%lld/%lld\r\n"
+            "Accept-Ranges: bytes\r\n"
+            "Connection: close\r\n"
+            "\r\n",
+            end - start + 1,
+            start,
+            end,
+            total);
     }
     else
     {
+        start = 0;
+
         dprintf(c,
             "HTTP/1.1 200 OK\r\n"
             "Content-Length: %lld\r\n"
             "Accept-Ranges: bytes\r\n"
             "Connection: close\r\n"
             "\r\n",
-            total
-        );
+            total);
+    }
+
+
+    if (head)
+    {
+        close(f);
+        return;
     }
 
 
@@ -191,12 +173,7 @@ int main(int argc, char **argv)
     signal(SIGPIPE, SIG_IGN);
 
 
-    s = socket(
-        AF_INET,
-        SOCK_STREAM,
-        0
-    );
-
+    s = socket(AF_INET, SOCK_STREAM, 0);
 
     if (s < 0)
         return 1;
@@ -213,12 +190,7 @@ int main(int argc, char **argv)
     );
 
 
-    memset(
-        &addr,
-        0,
-        sizeof(addr)
-    );
-
+    memset(&addr, 0, sizeof(addr));
 
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
@@ -238,19 +210,14 @@ int main(int argc, char **argv)
 
 
     printf(
-        "uhttpd listening on %d\n",
+        "levhttpd listening on %d\n",
         port
     );
 
 
     while (1)
     {
-        c = accept(
-            s,
-            NULL,
-            NULL
-        );
-
+        c = accept(s, NULL, NULL);
 
         if (c < 0)
             continue;
@@ -259,7 +226,7 @@ int main(int argc, char **argv)
         int n = read(
             c,
             request,
-            sizeof(request)-1
+            sizeof(request) - 1
         );
 
 
@@ -268,13 +235,14 @@ int main(int argc, char **argv)
             request[n] = 0;
 
 
-            if (sscanf(
-                    request,
-                    "GET /%1023s",
-                    path
-                ) == 1)
+            if ((strncmp(request, "GET ", 4) == 0 ||
+                 strncmp(request, "HEAD ", 5) == 0)
+                &&
+                sscanf(request,
+                       "%*s /%1023s",
+                       path) == 1)
             {
-                serve_file(
+                send_file(
                     c,
                     argv[2],
                     path,
