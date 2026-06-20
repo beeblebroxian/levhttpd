@@ -1,8 +1,0 @@
-micro-http Debian sources
--------------------------
-
- The original micro_httpd.8 was converted into debian/micro-httpd.8.pod
- for easier maintenece. The accompanying debian/patches/ to the manual
- page were integrated to POD and these patches were removed.
-
- -- Jari Aalto <jari.aalto@cante.net>, Sun, 26 Oct 2008 13:36:24 +0300

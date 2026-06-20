@@ -1,3 +1,0 @@
-# Using var/www/html/ as a new default document root
-# See #730372 and https://lists.debian.org/debian-devel/2012/04/msg00301.html
-dir-or-file-in-var-www *var/www/html/*
