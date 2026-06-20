@@ -1,4 +1,4 @@
-name: build uhttpd
+name: build levhttpd Android ARMv7
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Android ARMv7 (armeabi-v7a)
     runs-on: ubuntu-22.04
 
     steps:
@@ -15,7 +16,7 @@ jobs:
         with:
           ndk-version: r26d
 
-      - name: build
+      - name: Build levhttpd for Android ARMv7
         run: |
           export T=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
 
@@ -23,12 +24,14 @@ jobs:
             -O2 \
             -fPIE \
             -pie \
-            uhttpd.c \
-            -o uhttpd
+            levhttpd.c \
+            -o levhttpd-android-armv7
 
-          $T/llvm-strip uhttpd
+          $T/llvm-strip levhttpd-android-armv7
+
+          file levhttpd-android-armv7
 
       - uses: actions/upload-artifact@v4
         with:
-          name: uhttpd-armv7
-          path: uhttpd
+          name: levhttpd-android-armv7
+          path: levhttpd-android-armv7
