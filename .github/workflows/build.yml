@@ -1,4 +1,4 @@
-name: Build micro_httpd for Android ARMv7
+name: Build Android ARMv7 HTTP server
 
 on:
   workflow_dispatch:
@@ -6,33 +6,38 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Android NDK
+      - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r26d
 
-      - name: Build micro_httpd
+      - name: Build httpserver ARMv7
+        shell: bash
         run: |
           export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
 
           $TOOLCHAIN/armv7a-linux-androideabi21-clang \
-            -static \
-            -Os \
-            -s \
-            -o micro_httpd \
-            micro_httpd.c
+            -O2 \
+            -fPIE \
+            -pie \
+            -Wall \
+            -Wextra \
+            httpserver.c \
+            -o httpserver
 
-          file micro_httpd
-          ls -lh micro_httpd
+          $TOOLCHAIN/llvm-strip httpserver
+
+          file httpserver
+          ls -lh httpserver
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: micro_httpd-android-armv7
-          path: micro_httpd
+          name: httpserver-android-armv7
+          path: httpserver
