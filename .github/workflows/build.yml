@@ -2,6 +2,7 @@ name: build uhttpd
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
