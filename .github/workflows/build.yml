@@ -1,43 +1,33 @@
-name: Build Android ARMv7 HTTP server
+name: build uhttpd
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Android NDK
-        uses: nttld/setup-ndk@v1
+      - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r26d
 
-      - name: Build httpserver ARMv7
-        shell: bash
+      - name: build
         run: |
-          export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
+          export T=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
 
-          $TOOLCHAIN/armv7a-linux-androideabi21-clang \
+          $T/armv7a-linux-androideabi21-clang \
             -O2 \
             -fPIE \
             -pie \
-            -Wall \
-            -Wextra \
-            httpserver.c \
-            -o httpserver
+            uhttpd.c \
+            -o uhttpd
 
-          $TOOLCHAIN/llvm-strip httpserver
+          $T/llvm-strip uhttpd
 
-          file httpserver
-          ls -lh httpserver
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: httpserver-android-armv7
-          path: httpserver
+          name: uhttpd-armv7
+          path: uhttpd
