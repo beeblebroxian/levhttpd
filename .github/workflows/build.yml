@@ -1,0 +1,38 @@
+name: Build micro_httpd for Android ARMv7
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26d
+
+      - name: Build micro_httpd
+        run: |
+          export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+          $TOOLCHAIN/armv7a-linux-androideabi21-clang \
+            -static \
+            -Os \
+            -s \
+            -o micro_httpd \
+            micro_httpd.c
+
+          file micro_httpd
+          ls -lh micro_httpd
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: micro_httpd-android-armv7
+          path: micro_httpd
